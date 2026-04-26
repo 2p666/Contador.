@@ -24,24 +24,22 @@
             align-items: center;
         }
 
-        /* Imagem de Fundo Local */
+        /* Imagem de Fundo */
         .background-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            
-            /* AQUI ESTÁ A MUDANÇA: Substitua 'fundo.jpg' pelo nome da sua imagem */
             background-image: url('ContImg/GoghS.jfif'); 
-            
             background-size: cover;
             background-position: center;
             
-            /* Estado de espera: imagem oculta e com blur */
-            filter: brightness(0) blur(30px); 
-            transition: all 4s ease-in-out; /* Transição de 4 segundos para a revelação */
-            z-index: -2;
+            /* Começa invisível (opacidade 0) e com blur */
+            opacity: 0;
+            filter: blur(30px); 
+            transition: all 4s ease-in-out;
+            z-index: 1; /* Aumentado para ficar acima do fundo preto */
         }
 
         .vignette {
@@ -51,14 +49,21 @@
             width: 100%;
             height: 100%;
             background: radial-gradient(circle, transparent 20%, black 150%);
-            z-index: -1;
+            z-index: 2;
             transition: opacity 2s;
+            pointer-events: none;
         }
 
-        /* QUANDO CHEGAR A ZERO: Revela a imagem */
+        /* ESTADO QUANDO CHEGAR A ZERO */
         body.together .background-overlay {
-            filter: brightness(1) blur(0px); 
-            transform: scale(1.05); /* Leve zoom ao revelar */
+            opacity: 1;
+            filter: blur(0px); 
+            transform: scale(1.05);
+        }
+
+        /* Esconde as estrelas para a imagem aparecer melhor */
+        body.together #star-field {
+            display: none;
         }
 
         body.together .vignette {
@@ -70,7 +75,7 @@
             background: white;
             border-radius: 50%;
             pointer-events: none;
-            z-index: 0;
+            z-index: 1;
         }
 
         #content-wrapper {
@@ -206,7 +211,6 @@
                     document.body.classList.add('together');
                     document.getElementById('countdown-container').style.display = 'none';
                     document.getElementById('message').style.display = 'block';
-                    createStars(300);
                 }
             } else {
                 if (document.body.classList.contains('together') || !starsActive) {
