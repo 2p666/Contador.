@@ -24,22 +24,26 @@
             align-items: center;
         }
 
-        /* Imagem de Fundo com Filtro */
+        /* Imagem de Fundo Local */
         .background-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?auto=format&fit=crop&w=1920&q=80');
+            
+            /* AQUI ESTÁ A MUDANÇA: Substitua 'fundo.jpg' pelo nome da sua imagem */
+            background-image: url('ContImg/GoghS.jfif'); 
+            
             background-size: cover;
             background-position: center;
-            filter: brightness(0.3) grayscale(0.5); /* Escuro e sem vida enquanto espera */
-            transition: all 2s ease-in-out;
+            
+            /* Estado de espera: imagem oculta e com blur */
+            filter: brightness(0) blur(30px); 
+            transition: all 4s ease-in-out; /* Transição de 4 segundos para a revelação */
             z-index: -2;
         }
 
-        /* Camada extra de escuridão */
         .vignette {
             position: fixed;
             top: 0;
@@ -51,17 +55,16 @@
             transition: opacity 2s;
         }
 
-        /* Efeito quando estiverem juntos */
+        /* QUANDO CHEGAR A ZERO: Revela a imagem */
         body.together .background-overlay {
-            filter: brightness(1.1) saturate(1.2); /* Imagem brilha */
-            transform: scale(1.05);
+            filter: brightness(1) blur(0px); 
+            transform: scale(1.05); /* Leve zoom ao revelar */
         }
 
         body.together .vignette {
             opacity: 0.4;
         }
 
-        /* Estrelas */
         .star {
             position: absolute;
             background: white;
@@ -70,7 +73,6 @@
             z-index: 0;
         }
 
-        /* Conteúdo Principal */
         #content-wrapper {
             position: relative;
             z-index: 10;
@@ -114,7 +116,6 @@
             text-transform: uppercase;
         }
 
-        /* Mensagem de Celebração */
         #message {
             display: none;
             font-family: 'Dancing Script', cursive;
@@ -154,7 +155,6 @@
     <script>
         const starField = document.getElementById('star-field');
         
-        // Função para criar estrelas
         function createStars(count) {
             starField.innerHTML = '';
             for (let i = 0; i < count; i++) {
@@ -166,8 +166,6 @@
                 star.style.top = Math.random() * 100 + '%';
                 star.style.left = Math.random() * 100 + '%';
                 star.style.opacity = Math.random();
-                
-                // Animação de brilho
                 star.style.animation = `pulse ${2 + Math.random() * 3}s infinite`;
                 starField.appendChild(star);
             }
@@ -191,7 +189,7 @@
             else if (day === 0 && hour < 13) {
                 target.setHours(13, 0, 0, 0);
             }
-            // Período "Juntos" (Sábado 16h até Domingo 23:59...)
+            // Período "Juntos"
             else if ((day === 6 && hour >= 16) || (day === 0 && hour >= 13)) {
                 isTogether = true;
             }
@@ -208,14 +206,14 @@
                     document.body.classList.add('together');
                     document.getElementById('countdown-container').style.display = 'none';
                     document.getElementById('message').style.display = 'block';
-                    createStars(300); // Mais estrelas quando juntos
+                    createStars(300);
                 }
             } else {
                 if (document.body.classList.contains('together') || !starsActive) {
                     document.body.classList.remove('together');
                     document.getElementById('countdown-container').style.display = 'block';
                     document.getElementById('message').style.display = 'none';
-                    createStars(80); // Menos estrelas na espera
+                    createStars(200);
                     starsActive = true;
                 }
 
